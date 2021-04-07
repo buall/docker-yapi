@@ -24,6 +24,8 @@ cd /yapi/vendors
 
 ### INIT CONFIG
 cp /yapi/vendors/config_example.json /yapi/config.json
+sed -i '3a\  "versionNotify": true,' /yapi/config.json
+sed -i '4a\  "closeRegister": false,' /yapi/config.json
 sed -i "s|\"user\"\:\ \"test1\"|\"user\"\:\ \"\"|g" /yapi/config.json
 sed -i "s|\"pass\"\:\ \"test1\"|\"pass\"\:\ \"\"|g" /yapi/config.json
 

@@ -17,9 +17,12 @@ sed -i "s|\"pass\"\:\ \"\"|\"pass\"\:\ \"$DB_PASSWORD\"|g" /yapi/config.json
 ## YAPI INFO
 # YAPI PORT
 sed -i "s|\"port\"\:\ \"3000\"|\"port\"\:\ \"$YAPI_PORT\"|g" /yapi/config.json
-## YAPI ADMIN ACCOUNT
+# YAPI ADMIN ACCOUNT
 sed -i "s|\"adminAccount\"\:\ \"admin@admin.com\"|\"adminAccount\"\:\ \"$YAPI_ACCOUNT\"|g" /yapi/config.json
-
+# REGISTER MODULE
+if [ ${ALLOW_REGISTER}=="false" ]; then
+	sed -i "s|\"closeRegister\"\:\ false|\"closeRegister\"\:\ true|g" /yapi/config.json
+fi
 
 # Install server
 if [ ! -f /yapi/init.lock ]; then

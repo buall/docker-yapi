@@ -8,6 +8,7 @@ ENV DB_USER=""
 ENV DB_PASSWORD=""
 ENV YAPI_PORT="3000"
 ENV YAPI_ACCOUNT="admin@admin.com"
+ENV ALLOW_REGISTER=true
 
 COPY ./build.sh /build.sh
 COPY ./start.sh /start.sh
