@@ -1,0 +1,33 @@
+version: "3"
+services:
+  yapi:
+    image: registry.cn-shenzhen.aliyuncs.com/maimages/yapi
+    container_name: yapi
+    environment:
+      - DB_HOST=yapi-mongo
+      - DB_PORT=27017
+      - DB_NAME=yapi
+      - DB_USER=
+      - DB_PASSWORD=
+      - YAPI_PORT=3000
+      - YAPI_ACCOUNT=admin@admin.com
+      - ALLOW_REGISTER=false
+    ports:
+      - 3000:3000
+    depends_on:
+      - yapi-mongo
+    networks:
+      - yapi 
+  yapi-mongo:
+    image: mongo
+    container_name: yapi-mongo
+    volumes:
+      - db-data:/data/db
+    networks:
+      - yapi
+
+networks:
+  yapi:
+
+volumes:
+  db-data:
