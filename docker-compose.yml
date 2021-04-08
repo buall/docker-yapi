@@ -11,7 +11,7 @@ services:
       - DB_PASSWORD=
       - YAPI_PORT=3000
       - YAPI_ACCOUNT=admin@admin.com
-      - ALLOW_REGISTER=false
+      - ALLOW_REGISTER=true
     ports:
       - 3000:3000
     depends_on:
