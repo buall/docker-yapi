@@ -1,6 +1,7 @@
 FROM node:12-buster-slim
 
-ENV YAPI_VERSION="v1.9.2"
+
+ENV YAPI_VERSION="1.9.2"
 ENV DB_HOST="127.0.0.1"
 ENV DB_PORT="27017"
 ENV DB_NAME="yapi"
@@ -10,7 +11,28 @@ ENV YAPI_PORT="3000"
 ENV YAPI_ACCOUNT="admin@admin.com"
 ENV ALLOW_REGISTER=true
 
-COPY ./build.sh /build.sh
+
 COPY ./start.sh /start.sh
-RUN /build.sh && rm -f /build.sh
+
+
+RUN apt-get update -y && apt-get install python make wget unzip -y; \
+		country=`wget -qO- --timeout=2 --tries=5 ipinfo.io | grep "country" | awk '{print $2}' | grep -oE '[a-zA-Z]{2,}'`; \
+		[ -n "$country" -a "$country" = "CN" ] && YAPI_URL="https://gitee.com/mirrors/YApi/repository/archive/v${YAPI_VERSION}.zip" || YAPI_URL="https://github.com/YMFE/yapi/archive/refs/tags/v${YAPI_VERSION}.zip"; \
+		[ -n "$country" -a "$country" = "CN" ] && npm config set registry https://registry.npm.taobao.org; \
+		echo "YAPI Download Address: ${YAPI_URL}"; \
+		wget ${YAPI_URL}; \
+		mkdir -p /yapi; \
+		unzip v${YAPI_VERSION}.zip -d /yapi; \
+		[ -n "$country" -a "$country" = "CN" ] && mv /yapi/YApi /yapi/vendors || mv /yapi/yapi-${YAPI_VERSION} /yapi/vendors; \
+		cd /yapi/vendors; \
+		cp /yapi/vendors/config_example.json /yapi/config.json; \
+		sed -i '3a\  "versionNotify": true,' /yapi/config.json; \
+		sed -i '4a\  "closeRegister": false,' /yapi/config.json; \
+		sed -i "s|\"user\"\:\ \"test1\"|\"user\"\:\ \"\"|g" /yapi/config.json; \
+		sed -i "s|\"pass\"\:\ \"test1\"|\"pass\"\:\ \"\"|g" /yapi/config.json; \
+		npm install -g node-gyp; \
+		npm install --production; \
+		rm -f /v${YAPI_VERSION}.zip && apt-get remove wget unzip --purge -y && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+
+
 CMD ["/start.sh"]
