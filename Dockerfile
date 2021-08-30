@@ -1,7 +1,7 @@
 FROM node:12-buster-slim
 
 
-ENV YAPI_VERSION="1.9.2" \
+ENV YAPI_VERSION="1.9.3" \
 	DB_HOST="127.0.0.1" \
 	DB_PORT="27017" \
 	DB_NAME="yapi" \
