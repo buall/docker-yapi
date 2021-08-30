@@ -15,7 +15,7 @@ ENV YAPI_VERSION="1.9.2" \
 COPY ./start.sh /start.sh
 
 
-RUN apt-get update -y && apt-get install python make wget unzip -y; \
+RUN apt-get update -y && apt-get install python make wget unzip vim -y; \
 	country=`wget -qO- --timeout=2 --tries=5 ipinfo.io | grep "country" | awk '{print $2}' | grep -oE '[a-zA-Z]{2,}'`; \
 	[ -n "$country" -a "$country" = "CN" ] && YAPI_URL="https://gitee.com/mirrors/YApi/repository/archive/v${YAPI_VERSION}.zip" || YAPI_URL="https://github.com/YMFE/yapi/archive/refs/tags/v${YAPI_VERSION}.zip"; \
 	[ -n "$country" -a "$country" = "CN" ] && npm config set registry https://registry.npm.taobao.org; \
